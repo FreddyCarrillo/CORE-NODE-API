@@ -8,10 +8,13 @@ dotenv.config();
 class Server {
   private app: Application;
   private port: number;
+  private hostname: string;
 
   constructor() {
     this.app = express();
-    this.port = parseInt(process.env.PORT || '5000');
+    this.port = Number(process.env.PORT) || 8801;
+    this.hostname = process.env.HOST || '0.0.0.0';
+
     this.initializeMiddlewares();
     this.initializeRoutes();
     this.connectDB();
@@ -30,8 +33,8 @@ class Server {
   }
 
   public listen(): void {
-    this.app.listen(this.port, () => {
-      console.log(`Servidor corriendo en http://localhost:${this.port}`);
+    this.app.listen(this.port, this.hostname, () => {
+      console.log(`Server running on http://${this.hostname}:${this.port}`);
     });
   }
 }
